@@ -18,7 +18,7 @@ class NotificationController extends Controller
             'first_name' => 'required|max:50',
             'last_name' => 'required|max:50',
             'birth_date' => 'required|date',
-            'notification_token' => 'required|min:150|max:155|unique:profiles',
+            'notification_token' => 'required|min:150|max:155',
         ];
 
         $validation = Validator::make($request->all(), $rules);
@@ -30,7 +30,11 @@ class NotificationController extends Controller
             ], 422);
         }
 
-        $profile = new Profile;
+        $profile = Profile::where(['notification_token' => $request->notification_token])
+            ->orWhere(['first_name' => $request->first_name, 'last_name' => $request->last_name])
+            ->first();
+
+        $profile =  $profile ?: new Profile;
 
         $profile->first_name = $request->first_name;
         $profile->last_name = $request->last_name;
