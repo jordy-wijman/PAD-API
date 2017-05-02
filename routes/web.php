@@ -21,3 +21,5 @@ Route::get('/home', 'HomeController@index');
 Route::get('/profile', 'ProfileController@index');
 Route::post('/api/notification/send', 'NotificationController@send');
 Route::post('/api/notification/register_profile', 'NotificationController@registerProfile');
+Route::post('/api/notification/add_time', 'NotificationController@addTime');
+Route::post('/api/notification/remove_time', 'NotificationController@removeTime');
