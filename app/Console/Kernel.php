@@ -27,6 +27,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function () {
+            date_default_timezone_set('Europe/Amsterdam');
+
             $notifications = Time::where(['time' => date('H:i')])->get();
 
             foreach ($notifications as $notification) {
