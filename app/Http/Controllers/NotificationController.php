@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Custom\Notification;
 use App\Profile;
 use App\Time;
 use Illuminate\Http\Request;
@@ -111,28 +112,14 @@ class NotificationController extends Controller
             'notification_title' => 'required|max:50',
             'notification_body' => 'required|max:255'
         ]);
-
-        $optionBuiler = new OptionsBuilder();
-        $optionBuiler->setTimeToLive(60*20);
-
-        $notificationBuilder = new PayloadNotificationBuilder();
-
-        $dataBuilder = new PayloadDataBuilder();
-        $dataBuilder->addData(['title' => $request->notification_title, 'text' => $request->notification_body]);
-
-        $option = $optionBuiler->build();
-        $notification = $notificationBuilder->build();
-        $data = $dataBuilder->build();
-
         $profile = Profile::where(
             ['first_name' => $request->receiver_first_name, 'last_name' => $request->receiver_last_name]
         )->first();
-        $token = $profile->notification_token;
 
-        FCM::sendTo($token, $option, $notification, $data);
+        $notification = new Notification($request->notification_title, $request->notification_body);
+        $notification->send($profile);
 
         Session::flash('success', 'Successfully sent your notification!');
-
         return redirect()->back();
     }
 
