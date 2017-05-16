@@ -3,7 +3,7 @@
 namespace App\Console;
 
 use App\Custom\Notification;
-use App\Time;
+use App\Alarm;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             date_default_timezone_set('Europe/Amsterdam');
 
-            $notifications = Time::where(['time' => date('H:i')])->get();
+            $notifications = Alarm::where(['time' => date('H:i')])->get();
 
             foreach ($notifications as $notification) {
                 $profile = $notification->profile;

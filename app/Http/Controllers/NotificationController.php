@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Custom\Notification;
 use App\Profile;
-use App\Time;
+use App\Alarm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -65,12 +65,12 @@ class NotificationController extends Controller
 
         $profile = Profile::where(['notification_token' => $request->notification_token])->first();
 
-        $timeCheck = Time::where(['profile_id' => $profile->id, 'time' => $request->notification_time])->first();
+        $timeCheck = Alarm::where(['profile_id' => $profile->id, 'time' => $request->notification_time])->first();
         if ($timeCheck != null) {
             return response()->json(['success' => false, 'message' => 'This time was already added!'], 422);
         }
 
-        $time = new Time;
+        $time = new Alarm;
         $time->profile_id = $profile->id;
         $time->time = $request->notification_time;
         $time->save();
@@ -95,7 +95,7 @@ class NotificationController extends Controller
 
         $profile = Profile::where(['notification_token' => $request->notification_token])->first();
 
-        $timeCheck = Time::where(['profile_id' => $profile->id, 'time' => $request->notification_time])->first();
+        $timeCheck = Alarm::where(['profile_id' => $profile->id, 'time' => $request->notification_time])->first();
         if ($timeCheck == null) {
             return response()->json(['success' => false, 'message' => 'This time was already removed!'], 200);
         }

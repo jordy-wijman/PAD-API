@@ -13,7 +13,7 @@ class CreateTimeTable extends Migration
      */
     public function up()
     {
-        Schema::create('times', function(Blueprint $table) {
+        Schema::create('alarms', function(Blueprint $table) {
             $table->increments('id');
             $table->integer('profile_id')->unsigned();
             $table->foreign('profile_id')->references('id')->on('profiles');
