@@ -19,7 +19,11 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 Route::get('/profile', 'ProfileController@index');
-Route::post('/api/notification/send', 'NotificationController@send');
-Route::post('/api/notification/register_profile', 'NotificationController@registerProfile');
-Route::post('/api/notification/add_time', 'NotificationController@addTime');
-Route::post('/api/notification/remove_time', 'NotificationController@removeTime');
+Route::post('/notification/send', 'NotificationController@send');
+
+Route::post('/api/profile/register', 'Api/AlarmController@register');
+
+Route::post('/api/alarm/add', 'Api/AlarmController@add');
+Route::post('/api/alarm/remove', 'Api/AlarmController@remove');
+
+Route::post('/api/smoke_data/add', 'Api/SmokeDataController@add');

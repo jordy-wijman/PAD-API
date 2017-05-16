@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAlarmsTable extends Migration
+class CreateSmokeDataTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CreateAlarmsTable extends Migration
      */
     public function up()
     {
-        Schema::create('alarms', function(Blueprint $table) {
+        Schema::create('smoke_data', function(Blueprint $table) {
             $table->increments('id');
+            $table->dateTime('time_smoked');
+            $table->integer('amount')->unsigned();
             $table->integer('profile_id')->unsigned();
+
             $table->foreign('profile_id')->references('id')->on('profiles');
-
-            $table->time('time');
-            $table->timestamps();
-
-            $table->unique(["profile_id", "time"]);
         });
     }
 
@@ -32,6 +30,6 @@ class CreateAlarmsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists("times");
+        Schema::dropIfExists('smoke_data');
     }
 }
