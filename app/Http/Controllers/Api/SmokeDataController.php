@@ -32,5 +32,7 @@ class SmokeDataController extends Controller
         $smokeData->amount = $request->amount;
         $smokeData->profile_id = $profile->id;
         $smokeData->save();
+
+        return response()->json(['success' => true, 'message' => 'Successfully registered your smoke data'], 200);
     }
 }
