@@ -24,7 +24,7 @@
                         </div>
                     @endif
 
-                    <form action="/api/notification/send" method="POST">
+                    <form action="/notification/send" method="POST">
                         {{ csrf_field() }}
                         <div class="form-group">
                             <label for="exampleInputEmail1">Receivers first name</label>
