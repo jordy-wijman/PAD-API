@@ -16,5 +16,6 @@ class VerifyCsrfToken extends BaseVerifier
         '/api/alarm/add',
         '/api/alarm/remove',
         '/api/smoke_data/add',
+        '/api/goal/add',
     ];
 }
