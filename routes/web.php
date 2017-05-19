@@ -27,6 +27,6 @@ Route::post('/api/alarm/add', 'Api\AlarmController@add');
 Route::post('/api/alarm/remove', 'Api\AlarmController@remove');
 
 Route::post('/api/smoke_data/add', 'Api\SmokeDataController@add');
-Route::post('/api/smoke_data/smoke_free_for', 'Api\SmokeDataController@smokeFreeFor');
+Route::post('/api/smoke_data/get_tile_data', 'Api\SmokeDataController@getTileData');
 
 Route::post('/api/goal/add', 'Api\GoalController@add');

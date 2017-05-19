@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Validator;
 
 class AlarmController extends Controller
 {
-    public function add(Request $request) {
+    public function add(Request $request)
+    {
         $rules = [
             'notification_token' => 'required|min:150|max:155',
             'notification_time' => 'required|min:3|max:5',
@@ -40,7 +41,8 @@ class AlarmController extends Controller
         return response()->json(['success' => true, 'message' => 'Successfully added your time!'], 200);
     }
 
-    public function remove(Request $request) {
+    public function remove(Request $request)
+    {
         $rules = [
             'notification_token' => 'required|min:150|max:155',
             'notification_time' => 'required|min:3|max:5',

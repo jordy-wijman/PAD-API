@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Custom\TileData;
 use App\Profile;
 use App\SmokeData;
 use Carbon\Carbon;
@@ -11,13 +12,13 @@ use Illuminate\Support\Facades\Validator;
 
 class SmokeDataController extends Controller
 {
-    public function smokeFreeFor(Request $request)
+    public function getTileData(Request $request)
     {
         $rules = [
             'notification_token' => 'required|min:150|max:155'
         ];
 
-        $validation = Validator::make($request->all, $rules);
+        $validation = Validator::make($request->all(), $rules);
         if (!$validation->passes()) {
             return response()->json(
                 ['success' => false, 'message' => $validation->errors()],
@@ -25,21 +26,32 @@ class SmokeDataController extends Controller
             );
         }
 
+        $tileData = new TileData();
+
         $profile = Profile::where(['notification_token' => $request->notification_token])->first();
+
+        $amount = SmokeData::where(['profile_id' => $profile->id])
+            ->whereDay('time_smoked', '=', date('d'))
+            ->sum('amount');
+
+        $tileData->smokedToday = $amount;
+        $tileData->cigarettesSaved = $profile->cigarettes_per_day - $amount;
+        $tileData->setSavedMoney($tileData->cigarettesSaved * ($profile->price_per_pack / $profile->cigarettes_per_pack));
+        $tileData->notSmokedFor = "No data found!";
 
         $lastSmokeData = SmokeData::where(
             ['profile_id' => $profile->id]
-        )->orderBy('time_smoked', 'desc')->last();
+        )->orderBy('time_smoked', 'desc')->first();
 
-        if (!$lastSmokeData) {
-            return response()->json(['success' => false, 'message' => 'No smoke data found!']);
+        if ($lastSmokeData) {
+            $now = Carbon::now();
+            $lastSmokeDate = Carbon::parse($lastSmokeData->time_smoked);
+
+            $date = $lastSmokeDate->diff($now)->format("%H:%i");
+            $tileData->notSmokedFor = $date;
         }
 
-        $now = Carbon::now();
-        $lastSmokeDate = Carbon::parse($lastSmokeData->time_smoked);
-
-        $date = $lastSmokeDate->diffInHours($now) + $lastSmokeDate->diffInMinutes($now);
-        return response()->json(['success' => true, 'message' => $date]);
+        return response()->json(['success' => true, 'message' => $tileData]);
     }
 
     public function add(Request $request)

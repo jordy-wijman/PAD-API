@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Validator;
 
 class GoalController extends Controller
 {
-    public function add(Request $request) {
+    public function add(Request $request)
+    {
         $rules = [
             'goal' => 'required|max:100',
             'price' => 'required|between:0,99.99',

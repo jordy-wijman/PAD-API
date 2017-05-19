@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Session;
 
 class NotificationController extends Controller
 {
-    public function send(Request $request) {
+    public function send(Request $request)
+    {
         $this->validate($request, [
             'receiver_first_name' => 'required|max:50',
             'receiver_last_name' => 'required|max:50',
