@@ -27,14 +27,13 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function () {
-            date_default_timezone_set('Europe/Amsterdam');
-
             $notifications = Alarm::where(['time' => date('H:i')])->get();
 
             foreach ($notifications as $notification) {
                 $profile = $notification->profile;
 
-                $notification = new Notification('Het is weer tijd!', '{first_name}, het is weer tijd om een spel te spelen!');
+                $notification = new Notification("Let's go!", '{first_name}, 
+                    het is weer tijd om afgeleid te worden!');
                 $notification->send($profile);
             }
         })->everyMinute();
