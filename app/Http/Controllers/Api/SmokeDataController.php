@@ -47,7 +47,7 @@ class SmokeDataController extends Controller
             $now = Carbon::now();
             $lastSmokeDate = Carbon::parse($lastSmokeData->time_smoked);
 
-            $date = $lastSmokeDate->diff($now)->format("%H:%i");
+            $date = $lastSmokeDate->diff($now)->format("%H:%I");
             $tileData->notSmokedFor = $date;
         }
 
