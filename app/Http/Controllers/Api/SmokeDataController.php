@@ -28,7 +28,7 @@ class SmokeDataController extends Controller
 
         $tileData = new TileData();
 
-        $profile = Profile::where(['notification_token' => $request->notification_token])->first();
+        $profile = Profile::whereNotificationToken($request->notification_token)->first();
 
         $amount = SmokeData::where(['profile_id' => $profile->id])
             ->whereDay('time_smoked', '=', date('d'))
@@ -68,7 +68,7 @@ class SmokeDataController extends Controller
             );
         }
 
-        $profile = Profile::where(['notification_token' => $request->notification_token])->first();
+        $profile = Profile::whereNotificationToken($request->notification_token)->first();
 
         $smokeData = new SmokeData;
         $smokeData->time_smoked = Carbon::now();
