@@ -50,7 +50,7 @@ class Kernel extends ConsoleKernel
                 cigarettes_per_day, datediff(MAX(time_smoked), MIN(time_smoked)) + 1 AS days_inbetween 
             FROM smoke_data 
             JOIN profiles ON profiles.id = smoke_data.profile_id
-            WHERE added_to_price = 0 AND time_smoked <= CURRENT_TIMESTAMP - INTERVAL 1 DAY 
+            WHERE added_to_price = 0 AND date(time_smoked) <= date(CURRENT_DATE - INTERVAL 1 DAY) 
             GROUP BY profile_id'
             );
 
@@ -67,28 +67,29 @@ class Kernel extends ConsoleKernel
                 DB::table('smoke_data')
                     ->where('profile_id', $profile->id)
                     ->where('added_to_price', 0)
-                    ->whereRaw('time_smoked <= CURRENT_TIMESTAMP - INTERVAL 1 DAY')
+                    ->whereRaw('time_smoked', '<=', Carbon::now()->addDays(-1))
                     ->update(['added_to_price' => 1]);
 
-                $lastGoal = SavingGoal::whereProfileId($smoke->profile_id)
-                    ->whereNull('achieved_at')->orderByDesc('id')
+                $firstGoal = SavingGoal::whereProfileId($smoke->profile_id)
+                    ->whereNull('achieved_at')
+                    ->orderBy('id')
                     ->first();
 
-                if ($lastGoal && $profile->saved_amount >= $lastGoal->price) {
-                    $profile->saved_amount = $profile->saved_amount - $lastGoal->price;
+                if ($firstGoal && $profile->saved_amount >= $firstGoal->price) {
+                    $profile->saved_amount = $profile->saved_amount - $firstGoal->price;
                     $profile->save();
 
-                    $lastGoal->achieved_at = Carbon::now();
-                    $lastGoal->save();
+                    $firstGoal->achieved_at = Carbon::now();
+                    $firstGoal->save();
 
                     // Send notification
                     $notification = new Notification(
                         "Goed bezig! Doel behaalt!",
-                        "{first_name} je hebt jou doel: {$lastGoal->goal} behaald!");
+                        "{first_name} je hebt jou doel: {$firstGoal->goal} behaald!");
                     $notification->send($profile);
                 }
             }
-        })->everyTenMinutes();
+        })->dailyAt('11:00');
     }
 
     /**
