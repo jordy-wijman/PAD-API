@@ -67,7 +67,7 @@ class Kernel extends ConsoleKernel
                 DB::table('smoke_data')
                     ->where('profile_id', $profile->id)
                     ->where('added_to_price', 0)
-                    ->whereDate('time_smoked', '<=', Carbon::now()->addDays(-1))
+                    ->whereRaw('time_smoked <= CURRENT_TIMESTAMP - INTERVAL 1 DAY')
                     ->update(['added_to_price' => 1]);
 
                 $lastGoal = SavingGoal::whereProfileId($smoke->profile_id)
