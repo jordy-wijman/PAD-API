@@ -20,7 +20,7 @@ class GoalController extends ApiController
         $savingGoal->profile_id = $this->profile->id;
         $savingGoal->save();
 
-        return response()->json(['success' => true, 'message' => 'Successfully added your goal'], 200);
+        return response()->json(['success' => true, 'response' => ['goal' => $savingGoal]], 200);
     }
 
     public function remove(Request $request)
