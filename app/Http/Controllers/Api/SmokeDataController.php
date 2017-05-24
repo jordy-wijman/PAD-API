@@ -46,6 +46,7 @@ class SmokeDataController extends ApiController
         $smokeData->time_smoked = Carbon::now();
         $smokeData->amount = $request->amount;
         $smokeData->profile_id = $this->profile->id;
+        $smokeData->added_to_price = false;
         $smokeData->save();
 
         return response()->json(['success' => true, 'message' => 'Successfully registered your smoke data'], 200);
