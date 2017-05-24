@@ -21,7 +21,7 @@ class AlarmController extends ApiController
         $time->time = $request->notification_time;
         $time->save();
 
-        return response()->json(['success' => true, 'message' => 'Successfully added your time!'], 200);
+        return response()->json(['success' => true, 'response' => ['alarm' => $alarm]], 200);
     }
 
     public function remove(Request $request)

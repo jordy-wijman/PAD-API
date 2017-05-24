@@ -49,6 +49,6 @@ class SmokeDataController extends ApiController
         $smokeData->added_to_price = false;
         $smokeData->save();
 
-        return response()->json(['success' => true, 'message' => 'Successfully registered your smoke data'], 200);
+        return response()->json(['success' => true, 'response' => ['smoke_data' => $smokeData]], 200);
     }
 }

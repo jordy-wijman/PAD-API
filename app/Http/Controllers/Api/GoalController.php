@@ -23,7 +23,7 @@ class GoalController extends ApiController
         return response()->json(['success' => true, 'message' => 'Successfully added your goal'], 200);
     }
 
-    public function delete(Request $request)
+    public function remove(Request $request)
     {
         $this->validateRules($request, ['id' => 'required|integer']);
 
