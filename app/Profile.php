@@ -36,7 +36,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Profile extends Model
 {
-    public function times()
+    public function alarms()
     {
         return $this->hasMany('App\Alarm');
     }

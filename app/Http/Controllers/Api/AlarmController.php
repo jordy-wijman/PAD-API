@@ -8,33 +8,19 @@ use App\Alarm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class AlarmController extends Controller
+class AlarmController extends ApiController
 {
     public function add(Request $request)
     {
-        $rules = [
-            'notification_token' => 'required|min:150|max:155',
-            'notification_time' => 'required|min:3|max:5',
-        ];
+        $this->validateRules($request, ['notification_time' => 'required|min:3|max:5']);
 
-        $validation = Validator::make($request->all(), $rules);
-
-        if (!$validation->passes()) {
-            return response()->json([
-                'success' => false,
-                'message' => $validation->errors()
-            ], 422);
-        }
-
-        $profile = Profile::where(['notification_token' => $request->notification_token])->first();
-
-        $timeCheck = Alarm::where(['profile_id' => $profile->id, 'time' => $request->notification_time])->first();
+        $timeCheck = Alarm::where(['profile_id' => $this->profile->id, 'time' => $request->notification_time])->first();
         if ($timeCheck != null) {
             return response()->json(['success' => false, 'message' => 'This time was already added!'], 422);
         }
 
         $time = new Alarm;
-        $time->profile_id = $profile->id;
+        $time->profile_id = $this->profile->id;
         $time->time = $request->notification_time;
         $time->save();
 
@@ -43,23 +29,9 @@ class AlarmController extends Controller
 
     public function remove(Request $request)
     {
-        $rules = [
-            'notification_token' => 'required|min:150|max:155',
-            'notification_time' => 'required|min:3|max:5',
-        ];
+        $this->validateRules($request, ['notification_time' => 'required|min:3|max:5']);
 
-        $validation = Validator::make($request->all(), $rules);
-
-        if (!$validation->passes()) {
-            return response()->json([
-                'success' => false,
-                'message' => $validation->errors()
-            ], 422);
-        }
-
-        $profile = Profile::where(['notification_token' => $request->notification_token])->first();
-
-        $timeCheck = Alarm::where(['profile_id' => $profile->id, 'time' => $request->notification_time])->first();
+        $timeCheck = Alarm::where(['profile_id' => $this->profile->id, 'time' => $request->notification_time])->first();
         if ($timeCheck == null) {
             return response()->json(['success' => false, 'message' => 'This time was already removed!'], 200);
         }

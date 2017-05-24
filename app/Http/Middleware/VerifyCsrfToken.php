@@ -13,10 +13,15 @@ class VerifyCsrfToken extends BaseVerifier
      */
     protected $except = [
         '/api/profile/register',
+        '/api/profile/get_all_information',
+
         '/api/alarm/add',
         '/api/alarm/remove',
+
         '/api/smoke_data/add',
+
         '/api/goal/add',
+
         '/api/smoke_data/get_tile_data',
     ];
 }

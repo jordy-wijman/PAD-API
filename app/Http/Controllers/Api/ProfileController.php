@@ -7,28 +7,18 @@ use App\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class ProfileController extends Controller
+class ProfileController extends ApiController
 {
     public function register(Request $request)
     {
-        $rules = [
+        $this->validateRules($request, [
             'first_name' => 'required|max:50',
             'last_name' => 'required|max:50',
             'birth_date' => 'required|date',
-            'notification_token' => 'required|min:150|max:155',
             'price_per_pack' => 'required|between:0,99.99',
             'cigarettes_per_day' => 'required|integer|digits_between:0,50',
             'cigarettes_per_pack' => 'required|integer|digits_between:0,50'
-        ];
-
-        $validation = Validator::make($request->all(), $rules);
-
-        if (!$validation->passes()) {
-            return response()->json([
-                'success' => false,
-                'message' => $validation->errors()
-            ], 422);
-        }
+        ], null, false);
 
         $profile = Profile::where(['notification_token' => $request->notification_token])
             ->orWhere(['first_name' => $request->first_name, 'last_name' => $request->last_name])
@@ -46,6 +36,22 @@ class ProfileController extends Controller
 
         $profile->save();
 
-        return response()->json(['success' => true, 'message' => 'Successfully registered your device'], 200);
+        return $this->getAllInformation($request);
+    }
+
+    public function getAllInformation(Request $request)
+    {
+        $this->validateRules($request);
+
+        $this->profile->alarms;
+        $this->profile->savingGoals;
+
+        return response()->json(
+            ['success' => true,
+                'response' => [
+                    'profile' => $this->profile
+                ]
+            ], 200
+        );
     }
 }

@@ -38,7 +38,10 @@ class Kernel extends ConsoleKernel
             foreach ($notifications as $notification) {
                 $profile = $notification->profile;
 
-                $notification = new Notification("Laten we weer beginnen!", '{first_name} het is weer tijd om je gegevens in te vullen!');
+                $notification = new Notification(
+                    'Laten we weer beginnen!',
+                    '{first_name} het is weer tijd om je gegevens in te vullen!'
+                );
                 $notification->send($profile);
             }
         })->everyMinute();
