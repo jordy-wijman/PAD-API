@@ -21,6 +21,7 @@ class VerifyCsrfToken extends BaseVerifier
         '/api/smoke_data/add',
 
         '/api/goal/add',
+        '/api/goal/remove',
 
         '/api/smoke_data/get_tile_data',
     ];

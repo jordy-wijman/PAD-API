@@ -3,12 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Custom\TileData;
-use App\Profile;
 use App\SmokeData;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
 
 class SmokeDataController extends ApiController
 {

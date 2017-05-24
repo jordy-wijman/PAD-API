@@ -2,12 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Profile;
 use App\SavingGoal;
-use App\SmokeData;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
 
 class GoalController extends ApiController
 {
@@ -25,5 +21,24 @@ class GoalController extends ApiController
         $savingGoal->save();
 
         return response()->json(['success' => true, 'message' => 'Successfully added your goal'], 200);
+    }
+
+    public function delete(Request $request)
+    {
+        $this->validateRules($request, ['id' => 'required|integer']);
+
+        $goal = SavingGoal::where('profile_id',$this->profile->id)
+            ->whereNull('fetched_at')
+            ->first();
+
+        if (!$goal) {
+            return response()->json(
+                ['success' => false, 'message' => 'Goal not found or already completed'],
+                401
+            );
+        }
+
+        $goal->delete();
+        return response()->json(['success' => true, 'message' => 'Successfully removed your goal'], 200);
     }
 }

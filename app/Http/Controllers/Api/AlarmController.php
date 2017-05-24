@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Profile;
 use App\Alarm;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class AlarmController extends ApiController
 {
@@ -29,9 +26,9 @@ class AlarmController extends ApiController
 
     public function remove(Request $request)
     {
-        $this->validateRules($request, ['notification_time' => 'required|min:3|max:5']);
+        $this->validateRules($request, ['id' => 'required|integer']);
 
-        $timeCheck = Alarm::where(['profile_id' => $this->profile->id, 'time' => $request->notification_time])->first();
+        $timeCheck = Alarm::where(['profile_id' => $this->profile->id, 'id' => $request->id])->first();
         if ($timeCheck == null) {
             return response()->json(['success' => false, 'message' => 'This time was already removed!'], 200);
         }

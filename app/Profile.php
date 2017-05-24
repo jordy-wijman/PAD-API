@@ -33,6 +33,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Query\Builder|\App\Profile whereUpdatedAt($value)
  * @property float $saved_amount
  * @method static \Illuminate\Database\Query\Builder|\App\Profile whereSavedAmount($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Alarm[] $alarms
  */
 class Profile extends Model
 {
