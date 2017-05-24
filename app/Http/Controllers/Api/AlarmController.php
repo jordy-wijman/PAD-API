@@ -16,10 +16,10 @@ class AlarmController extends ApiController
             return response()->json(['success' => false, 'message' => 'This time was already added!'], 422);
         }
 
-        $time = new Alarm;
-        $time->profile_id = $this->profile->id;
-        $time->time = $request->notification_time;
-        $time->save();
+        $alarm = new Alarm;
+        $alarm->profile_id = $this->profile->id;
+        $alarm->time = $request->notification_time;
+        $alarm->save();
 
         return response()->json(['success' => true, 'response' => ['alarm' => $alarm]], 200);
     }
