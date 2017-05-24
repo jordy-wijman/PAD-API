@@ -27,11 +27,9 @@ class GoalController extends ApiController
     {
         $this->validateRules($request, ['id' => 'required|integer']);
 
-        $goal = SavingGoal::where('profile_id',$this->profile->id)
-            ->whereNull('achieved_at')
-            ->first();
+        $goal = SavingGoal::find($request->id);
 
-        if (!$goal) {
+        if (!$goal || $goal->achieved_at != null || $goal->profile_id != $this->profile->id) {
             return response()->json(
                 ['success' => false, 'message' => 'Goal not found or already completed'],
                 401
