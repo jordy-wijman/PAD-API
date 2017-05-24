@@ -28,7 +28,7 @@ class GoalController extends ApiController
         $this->validateRules($request, ['id' => 'required|integer']);
 
         $goal = SavingGoal::where('profile_id',$this->profile->id)
-            ->whereNull('fetched_at')
+            ->whereNull('achieved_at')
             ->first();
 
         if (!$goal) {
