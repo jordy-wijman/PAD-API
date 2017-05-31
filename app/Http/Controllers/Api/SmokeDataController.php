@@ -27,12 +27,15 @@ class SmokeDataController extends ApiController
         $tileData->notSmokedFor = "No data found!";
 
         $lastSmokeData = SmokeData::whereProfileId($this->profile->id)
+            ->where('amount', '!=', 0)
             ->orderBy('time_smoked', 'desc')->first();
 
         if ($lastSmokeData) {
             $lastSmokeDate = Carbon::parse($lastSmokeData->time_smoked);
 
-            $date = $lastSmokeDate->diff(Carbon::now())->format("%H:%I");
+            $hours = $lastSmokeDate->diffInHours(Carbon::now());
+            $minutes = $lastSmokeDate->diffInMinutes(Carbon::now()) - ($hours * 60);
+            $date = $hours . ':' . $minutes;
             $tileData->notSmokedFor = $date;
         }
 

@@ -15,7 +15,8 @@ class ProfileController extends ApiController
             'birth_date' => 'required|date',
             'price_per_pack' => 'required|between:0,99.99',
             'cigarettes_per_day' => 'required|integer|digits_between:0,50',
-            'cigarettes_per_pack' => 'required|integer|digits_between:0,50'
+            'cigarettes_per_pack' => 'required|integer|digits_between:0,50',
+            'stop_date' => 'required|date'
         ], null, false);
 
         $profile = Profile::where(['notification_token' => $request->notification_token])
@@ -31,6 +32,7 @@ class ProfileController extends ApiController
         $profile->price_per_pack = $request->price_per_pack;
         $profile->cigarettes_per_day = $request->cigarettes_per_day;
         $profile->cigarettes_per_pack = $request->cigarettes_per_pack;
+        $profile->stop_date = $request->stop_date;
 
         $profile->save();
 
