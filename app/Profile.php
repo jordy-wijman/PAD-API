@@ -34,9 +34,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $saved_amount
  * @method static \Illuminate\Database\Query\Builder|\App\Profile whereSavedAmount($value)
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Alarm[] $alarms
+ * @property \Carbon\Carbon $stop_date
+ * @method static \Illuminate\Database\Query\Builder|\App\Profile whereStopDate($value)
  */
 class Profile extends Model
 {
+    protected $dates = ['stop_date'];
+
     public function alarms()
     {
         return $this->hasMany('App\Alarm');

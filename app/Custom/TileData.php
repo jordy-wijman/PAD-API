@@ -5,7 +5,7 @@ namespace App\Custom;
 
 class TileData
 {
-    public $notSmokedFor, $cigarettesSaved, $smokedToday, $savedMoney;
+    public $notSmokedFor, $cigarettesSaved, $smokedToday, $savedMoney, $perfectLine, $myLine;
 
     public function setSavedMoney($money)
     {

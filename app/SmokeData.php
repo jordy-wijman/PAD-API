@@ -25,6 +25,8 @@ class SmokeData extends Model
     protected $table = 'smoke_data';
     public $timestamps = false;
 
+    protected $dates = ['time_smoked'];
+
     public function profile()
     {
         return $this->belongsTo('App\Profile');

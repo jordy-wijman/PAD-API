@@ -6,6 +6,7 @@ use App\Custom\TileData;
 use App\SmokeData;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use const PHP_ROUND_HALF_DOWN;
 
 class SmokeDataController extends ApiController
 {
@@ -19,10 +20,47 @@ class SmokeDataController extends ApiController
             ->whereDay('time_smoked', '=', date('d'))
             ->sum('amount');
 
+        $lastSmokeData = SmokeData::whereProfileId($this->profile->id)
+            ->whereDay('time_smoked', '!=', date('d'))->orderByDesc('time_smoked')
+            ->first();
+        $daysTryingToStop = $this->profile->created_at->diffInDays($lastSmokeData->time_smoked);
+
+        $perfectLine = [];
+        $daysTillStopDate = $this->profile->created_at->diffInDays($this->profile->stop_date);
+        $stopPerDay = $this->profile->cigarettes_per_day / $daysTillStopDate;
+        $current = $this->profile->cigarettes_per_day;
+
+        $desiredAmount = $this->profile->cigarettes_per_day;
+        for ($i = 1; floor($current) != 0; $i++) {
+            $current -= $stopPerDay;
+            $perfectLine[] = floor($current);
+
+            if ($i == $daysTryingToStop) {
+                $desiredAmount = floor($current);
+            }
+        }
+
+        $myLine = [];
+        $reference = $this->profile->created_at;
+        for ($i = 1; $i <= $daysTryingToStop; $i++) {
+            $reference->addDays(1);
+            $amountNow = SmokeData::whereProfileId($this->profile->id)
+                ->whereDate('time_smoked', '=', $reference->toDateString())
+                ->sum('amount');
+
+            if ($amountNow) {
+                $myLine[] = (int)$amountNow;
+            } else {
+                $myLine[] = $this->profile->cigarettes_per_day;
+            }
+        }
+
+        $tileData->myLine = $myLine;
+        $tileData->perfectLine = $perfectLine;
         $tileData->smokedToday = $amount;
-        $tileData->cigarettesSaved = $this->profile->cigarettes_per_day - $amount;
+        $tileData->cigarettesSaved = $desiredAmount - $amount;
         $tileData->setSavedMoney(
-            $tileData->cigarettesSaved * ($this->profile->price_per_pack / $this->profile->cigarettes_per_pack)
+            ($this->profile->cigarettes_per_day - $amount) * ($this->profile->price_per_pack / $this->profile->cigarettes_per_pack)
         );
         $tileData->notSmokedFor = "No data found!";
 
