@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateAlarmsTable extends Migration
 {
@@ -13,7 +13,7 @@ class CreateAlarmsTable extends Migration
      */
     public function up()
     {
-        Schema::create('alarms', function(Blueprint $table) {
+        Schema::create('alarms', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('profile_id')->unsigned();
             $table->foreign('profile_id')->references('id')->on('profiles');

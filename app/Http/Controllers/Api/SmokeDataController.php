@@ -6,7 +6,6 @@ use App\Custom\TileData;
 use App\SmokeData;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use const PHP_ROUND_HALF_DOWN;
 
 class SmokeDataController extends ApiController
 {

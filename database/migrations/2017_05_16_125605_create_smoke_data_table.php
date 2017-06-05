@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateSmokeDataTable extends Migration
 {
@@ -13,7 +13,7 @@ class CreateSmokeDataTable extends Migration
      */
     public function up()
     {
-        Schema::create('smoke_data', function(Blueprint $table) {
+        Schema::create('smoke_data', function (Blueprint $table) {
             $table->increments('id');
             $table->dateTime('time_smoked');
             $table->integer('amount')->unsigned();

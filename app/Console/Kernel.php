@@ -2,8 +2,8 @@
 
 namespace App\Console;
 
-use App\Custom\Notification;
 use App\Alarm;
+use App\Custom\Notification;
 use App\Profile;
 use App\SavingGoal;
 use App\SmokeData;
