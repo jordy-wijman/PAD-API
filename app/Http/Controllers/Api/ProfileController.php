@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Profile;
+use App\SmokeData;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ProfileController extends ApiController
@@ -33,6 +35,12 @@ class ProfileController extends ApiController
         $profile->cigarettes_per_day = $request->cigarettes_per_day;
         $profile->cigarettes_per_pack = $request->cigarettes_per_pack;
         $profile->stop_date = $request->stop_date;
+
+        $smokeData = new SmokeData;
+        $smokeData->profile_id = $profile->id;
+        $smokeData->amount = 0;
+        $smokeData->time_smoked = Carbon::now();
+        $smokeData->save();
 
         $profile->save();
 
