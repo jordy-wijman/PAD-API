@@ -12,11 +12,6 @@ class VerifyCsrfToken extends BaseVerifier
      * @var array
      */
     protected $except = [
-        '/api/profile/register',
-        '/api/alarm/add',
-        '/api/alarm/remove',
-        '/api/smoke_data/add',
-        '/api/goal/add',
-        '/api/smoke_data/get_tile_data',
+        '/api/*'
     ];
 }

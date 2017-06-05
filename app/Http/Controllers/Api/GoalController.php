@@ -2,38 +2,41 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Profile;
 use App\SavingGoal;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
 
-class GoalController extends Controller
+class GoalController extends ApiController
 {
     public function add(Request $request)
     {
-        $rules = [
+        $this->validateRules($request, [
             'goal' => 'required|max:100',
             'price' => 'required|between:0,99.99',
-            'notification_token' => 'required|min:150|max:155',
-        ];
-
-        $validation = Validator::make($request->all(), $rules);
-        if (!$validation->passes()) {
-            return response()->json(
-                ['success' => false, 'message' => $validation->errors()],
-                422
-            );
-        }
-
-        $profile = Profile::where(['notification_token' => $request->notification_token])->first();
+        ]);
 
         $savingGoal = new SavingGoal;
         $savingGoal->goal = $request->goal;
         $savingGoal->price = $request->price;
-        $savingGoal->profile_id = $profile->id;
+        $savingGoal->profile_id = $this->profile->id;
         $savingGoal->save();
 
-        return response()->json(['success' => true, 'message' => 'Successfully added your goal'], 200);
+        return response()->json(['success' => true, 'response' => ['goal' => $savingGoal]], 200);
+    }
+
+    public function remove(Request $request)
+    {
+        $this->validateRules($request, ['id' => 'required|integer']);
+
+        $goal = SavingGoal::find($request->id);
+
+        if (!$goal || $goal->achieved_at != null || $goal->profile_id != $this->profile->id) {
+            return response()->json(
+                ['success' => false, 'message' => 'Goal not found or already completed'],
+                401
+            );
+        }
+
+        $goal->delete();
+        return response()->json(['success' => true, 'message' => 'Successfully removed your goal'], 200);
     }
 }
