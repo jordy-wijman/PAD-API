@@ -23,7 +23,12 @@ class SmokeDataController extends ApiController
         $lastSmokeData = SmokeData::whereProfileId($this->profile->id)
             ->whereDay('time_smoked', '!=', date('d'))->orderByDesc('time_smoked')
             ->first();
-        $daysTryingToStop = $this->profile->created_at->diffInDays($lastSmokeData->time_smoked);
+
+        if ($lastSmokeData) {
+            $daysTryingToStop = $this->profile->created_at->diffInDays($lastSmokeData->time_smoked);
+        } else {
+            $daysTryingToStop = 0;
+        }
 
         $perfectLine = [];
         $daysTillStopDate = $this->profile->created_at->diffInDays($this->profile->stop_date);
